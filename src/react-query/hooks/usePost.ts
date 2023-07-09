@@ -10,8 +10,22 @@ export interface Post {
   userId: number;
 }
 
-const usePost = () => {
-  return useData<Post[]>({ endpoint: "/posts", key: ["Posts"] });
+export interface Props {
+  userId: number | undefined;
+  pageNumber: number;
+  pageSize: number;
+}
+
+const usePost = (query: Props) => {
+  return useData<Post[]>({
+    endpoint: "/posts",
+    key: ["Posts", query],
+    params: {
+      userId: query.userId,
+      _limit: query.pageSize,
+      _start: (query.pageNumber - 1) * query.pageSize,
+    },
+  });
 };
 
 export default usePost;

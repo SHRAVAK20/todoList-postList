@@ -5,8 +5,8 @@ import TodoList from "./react-query/TodoList";
 function App() {
   return (
     <>
-      <TodoList />
-      <h1>POSTS</h1>
+      {/* <TodoList />
+      <h1>POSTS</h1> */}
       <PostList />
     </>
   );
