@@ -2,6 +2,7 @@ import { Query, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import usePost from "./hooks/usePost";
+import React from "react";
 
 const PostList = () => {
   const pageSize = 10;
@@ -11,7 +12,8 @@ const PostList = () => {
     data: posts,
     error,
     isLoading,
-  } = usePost({ userId, pageNumber, pageSize });
+    fetchNextPage,
+  } = usePost({ userId, pageSize });
   if (error) return <p>{error.message}</p>;
 
   return (
@@ -27,24 +29,27 @@ const PostList = () => {
         <option value="3">User3</option>
       </select>
       <ul className="list-group">
-        {posts?.map((post) => (
+        {posts?.pages.map((page) => (
+          <React.Fragment>
+            {page.map((post) => (
+              <li key={post.id} className="list-group-item">
+                {post.title}
+              </li>
+            ))}
+          </React.Fragment>
+        ))}
+        {/* {posts?.map((post) => (
           <li key={post.id} className="list-group-item">
             {post.title}
           </li>
-        ))}
+        ))} */}
       </ul>
+
       <button
-        disabled={pageNumber === 1}
-        onClick={() => setPageNumber(pageNumber - 1)}
-        className="btn btn-primary my-3"
-      >
-        Previus
-      </button>
-      <button
-        onClick={() => setPageNumber(pageNumber + 1)}
+        onClick={() => fetchNextPage()}
         className="btn btn-primary my-3 ms-2"
       >
-        next
+        Load More ...
       </button>
     </>
   );

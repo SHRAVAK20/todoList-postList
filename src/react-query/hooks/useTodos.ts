@@ -3,7 +3,7 @@ import axios from "axios";
 import React from "react";
 import useData from "./useData";
 
-interface Todo {
+export interface Todo {
   id: number;
   title: string;
   userId: number;
