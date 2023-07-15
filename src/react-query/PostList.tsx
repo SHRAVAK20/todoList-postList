@@ -1,6 +1,4 @@
-import { Query, useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import usePost from "./hooks/usePost";
 import React from "react";
 

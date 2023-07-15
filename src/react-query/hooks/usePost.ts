@@ -1,7 +1,5 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React from "react";
-import useData from "./useData";
 
 export interface Post {
   id: number;
