@@ -6,38 +6,19 @@ import {
 import { useRef } from "react";
 import { Todo } from "./hooks/useTodos";
 import axios from "axios";
+import useAddTodos from "./hooks/useAddTodos";
 
 const TodoForm = () => {
-  const queryClient = useQueryClient();
-  const addTodoMutation = useMutation<Todo, Error, Todo>({
-    mutationFn: (todo: Todo) => {
-      return axios
-        .post<Todo>("https://jsonplaceholder.typicode.com/todos", todo)
-        .then((res) => res.data);
-    },
-    onSuccess: (updated_Id_In_Mytodo) => {
-      //Invalidate cache
-
-      // queryClient.invalidateQueries(['todo']);
-
-      //Update Cache
-      console.log(updated_Id_In_Mytodo);
-      queryClient.setQueryData<Todo[]>(["todos"], (todos) => [
-        updated_Id_In_Mytodo,
-        ...(todos || []),
-      ]);
-
-      if (ref.current) ref.current.value = "";
-    },
+  const addTodoMutation = useAddTodos(() => {
+    if (ref.current) ref.current.value = "";
   });
-
   const ref = useRef<HTMLInputElement>(null);
 
   return (
     <>
       {addTodoMutation.error && (
         <div className="alert alert-danger">
-          {addTodoMutation.error.message}
+          {addTodoMutation.error?.message}
         </div>
       )}
 
@@ -48,7 +29,7 @@ const TodoForm = () => {
           if (ref.current && ref.current.value)
             addTodoMutation.mutate({
               id: 0,
-              title: ref.current.value,
+              title: ref?.current?.value,
               userId: 1,
               completed: true,
             });
@@ -60,9 +41,9 @@ const TodoForm = () => {
         <div className="col">
           <button
             className="btn btn-primary"
-            disabled={addTodoMutation.isLoading}
+            disabled={addTodoMutation?.isLoading}
           >
-            {addTodoMutation.isLoading ? "Adding....." : "Add"}
+            {addTodoMutation?.isLoading ? "Adding....." : "Add"}
           </button>
         </div>
       </form>
